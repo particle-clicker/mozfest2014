@@ -4,55 +4,66 @@
 var Tracks = (function() {
   'use strict';
 
-  /** Create a new Track with endpoint given by `angle` and `radius`. The
-   * `charge` and `velocity` (of the corresponding particle) are used to
-   * determine the curvature of the track with respect to a given magnet.
-   */
-  var Track = function(angle, radius, charge, velocity) {
-    
-  };
+  var drawCurvedTrack = function(ctx, startX, startY, angle, radius, charge,
+                                 curvature) {
+    var midpointAngle = angle + charge * curvature;
+    var midpointX = startX + radius / 2 * Math.cos(midpointAngle);
+    var midpointY = startY + radius / 2 * Math.sin(midpointAngle);
+    var endpointX = startX + radius * Math.cos(angle);
+    var endpointY = startY + radius * Math.sin(angle);
 
-  /** Draw a track from the origin (0, 0) to a certain location (x, y).
-   * The track will bend depending on its velocity and charge and on the
-   * magnet's radius.
-   *
-   * Parameters:
-   *  ctx          - The context to be drawn on
-   *  x            - Horizontal coordinate of the track's endpoint
-   *  y            - Vertical coordinate of the track's endpoint
-   *  v            - The particle's velocity
-   *  q            - The particle's charge. Can be 0, 1 or -1
-   *  magnetRadius - Radius of the magnet. Used to determine whether the track
-   *                 bends twice
-   */
-  var drawTrack = function(ctx, x, y, v, q, magnetRadius) {
-    var r = Math.sqrt(x * x + y * y);
+    ctx.moveTo(startX, startY);
+    ctx.quadraticCurveTo(midpointX, midpointY, endpointX, endpointY);
+
+    return [endpointX, endpointY];
+  }; 
+
+  var drawMuonTrack = function(ctx, angle, charge, curvature) {
+    var radius = Detector.components.muon.outer + 20;
+    var rM = Detector.components.magnet.r;
 
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    if (q === 0) {  // Uncharged particles don't care about magnetic fields
-      ctx.lineTo(x, y);
-    } else {
-      if (r > magnetRadius) {  // Track goes beyond the magnet
-      } else {  // Track is fully within magnet
-        ctx.quadraticCurveTo(x/2, y + q * y / 2, x, y);
-      }
-    }
+    var magnetPoint = drawCurvedTrack(ctx, 0, 0, angle, rM, charge, curvature);
+    drawCurvedTrack(ctx, magnetPoint[0], magnetPoint[1], angle, radius - rM,
+                    charge * -1, curvature);
     ctx.stroke();
   };
 
-
-  var drawRandomTrack = function(ctx, w, h) {
-    var x = Math.random() * w - w / 2;
-    var y = Math.random() * h - h / 2;
-    var q = Math.floor(Math.random() * 3 - 1);
-    drawTrack(ctx, x, y, 0, q, 500);
+  var randomAngle = function() {
+    return Math.random() * Math.PI * 2;
   };
 
+  var randomRadius = function(comp) {
+    var component = Detector.components[comp];
+    if (!component) {
+      return 0;
+    }
+    var diff = component.outer - component.inner;
+    return Math.random() * diff + component.inner;
+  };
 
-  // Export functionality
+  var randomCurvature = function(min, max) {
+    return Math.PI / min + Math.random() * (Math.PI / max - Math.PI / min);
+  };
+
+  var drawRandomMuon = function(ctx) {
+    var angle = randomAngle();
+    var charge = Math.random() < 0.5 ? -1 : 1;
+    var curvature = randomCurvature(10, 5);
+    drawMuonTrack(ctx, angle, charge, curvature);
+  };
+
+  var drawRandomMuonPair = function(ctx) {
+    var angle1 = randomAngle();
+    var angle2 = randomAngle();
+    var curvature1 = randomCurvature(10, 5);
+    var curvature2 = randomCurvature(10, 5);
+    drawMuonTrack(ctx, angle1, 1, curvature1);
+    drawMuonTrack(ctx, angle2, -1, curvature2);
+  };
+
   return {
-    drawTrack: drawTrack,
-    drawRandomTrack: drawRandomTrack
+    drawRandomMuon: drawRandomMuon,
+    drawRandomMuonPair: drawRandomMuonPair
   };
 })();

@@ -3,12 +3,45 @@
 <head>
   <meta charset="utf-8">
   <title>My own Detector</title>
+
+  <style>
+    .btn {
+      background: #3498db;
+      -webkit-border-radius: 28;
+      -moz-border-radius: 28;
+      border-radius: 28px;
+      color: #ffffff;
+      font-size: 20px;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: #3cb0fd;
+      text-decoration: none;
+    }
+
+    .reset {
+      background: #ccc;
+    }
+
+    .reset:hover {
+      background: #eee;
+    }
+
+    #Actions, #Detector {
+      padding: 20px;
+    }
+  </style>
+
 </head>
 <body>
-  <h1>Click on the detector to generate events!</h1>
-  <p>
-    <button onclick="resetCanvas();">Reset</button>
-  </p>
+  <div id="Actions">
+    <a class="btn reset" href="#" onclick="resetCanvas(); return false;">Reset</a>
+
+    <a class="btn" href="#" onclick="Tracks.drawRandomMuon(ctx); return false;">µ<sup>±</sup></a>
+    <a class="btn" href="#" onclick="Tracks.drawRandomMuonPair(ctx); return false;">µ<sup>+</sup>µ<sup>-</sup></a>
+  </div>
 
   <canvas id="Detector" width="600" height="600">
     Your browser does not support HTML5 canvas. Where did you get such an old browser?
@@ -24,9 +57,9 @@
       ctx.translate(canvas.width / 2, canvas.height / 2);
       Detector.draw(ctx);
     };
-    canvas.addEventListener('click', function() {
-      Tracks.drawRandomTrack(ctx, canvas.width, canvas.height);
-    }, false);
+    //canvas.addEventListener('click', function() {
+    //  Tracks.drawRandomMuonTrack(ctx);
+    //}, false);
     resetCanvas();
   </script>
   <noscript>Your browser does not support Javascript. If you have turned it off on purpose, please turn it on for this page or otherwise upgrade your browser.</noscript>

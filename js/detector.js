@@ -9,8 +9,8 @@ var Detector = (function() {
     tracker: {inner: 20, outer: 100, color: '#FFFF80'},
     ecal: {inner: 102, outer: 140, color: '#00FF00'},
     hcal: {inner: 142, outer: 190, color: '#00FFFF'},
-    magnet: {inner: 192, outer: 210, color: '#666666'},
-    muon: {inner: 212, outer: 300, color: '#FF0000'}
+    magnet: {inner: 192, outer: 210, color: '#666666', r: 200},
+    muon: {inner: 212, outer: 290, color: '#FF0000'}
   };
 
   var drawComponent = function(ctx, comp) {
@@ -29,6 +29,7 @@ var Detector = (function() {
   };
 
   return {
+    components: components,
     draw: draw
   };
 })();
