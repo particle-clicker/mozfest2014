@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>My own Detector</title>
+</head>
+<body>
+  <h1>Click on the detector to generate events!</h1>
+  <p>
+    <button onclick="resetCanvas();">Reset</button>
+  </p>
+
+  <canvas id="Detector" width="600" height="600">
+    Your browser does not support HTML5 canvas. Where did you get such an old browser?
+  </canvas>
+
+  <script src="js/detector.js"></script>
+  <script src="js/tracks.js"></script>
+  <script>
+    var canvas = document.getElementById('Detector');
+    var ctx = canvas.getContext('2d');
+    var resetCanvas = function() {
+      canvas.width = canvas.width;
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      Detector.draw(ctx);
+    };
+    canvas.addEventListener('click', function() {
+      Tracks.drawRandomTrack(ctx, canvas.width, canvas.height);
+    }, false);
+    resetCanvas();
+  </script>
+  <noscript>Your browser does not support Javascript. If you have turned it off on purpose, please turn it on for this page or otherwise upgrade your browser.</noscript>
+</body>
+</html>
