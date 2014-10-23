@@ -39,7 +39,8 @@
   <div id="Actions">
     <a class="btn reset" href="#" onclick="resetCanvas(); return false;">Reset</a>
 
-    <a class="btn" href="#" onclick="Tracks.drawRandomMuon(ctx); return false;">µ<sup>±</sup></a>
+    <a class="btn" href="#" onclick="Tracks.drawRandomMuon(ctx, -1); return false;">µ<sup>-</sup></a>
+    <a class="btn" href="#" onclick="Tracks.drawRandomMuon(ctx, 1); return false;">µ<sup>+</sup></a>
     <a class="btn" href="#" onclick="Tracks.drawRandomMuonPair(ctx); return false;">µ<sup>+</sup>µ<sup>-</sup></a>
   </div>
 

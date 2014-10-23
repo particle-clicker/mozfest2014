@@ -46,9 +46,11 @@ var Tracks = (function() {
     return Math.PI / min + Math.random() * (Math.PI / max - Math.PI / min);
   };
 
-  var drawRandomMuon = function(ctx) {
+  var drawRandomMuon = function(ctx, charge) {
     var angle = randomAngle();
-    var charge = Math.random() < 0.5 ? -1 : 1;
+    if (typeof(charge) === "undefined") {
+      charge || Math.random() < 0.5 ? -1 : 1;
+    }
     var curvature = randomCurvature(10, 5);
     drawMuonTrack(ctx, angle, charge, curvature);
   };
